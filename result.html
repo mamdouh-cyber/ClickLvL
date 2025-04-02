@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Timer Results</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Your Timer Results</h1>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Your Time</h2>
+            <div class="result-display">
+                <div id="timeResult" class="time-box">
+                    <span class="time-number">0.00</span>
+                    <span class="time-label">seconds</span>
+                </div>
+            </div>
+            <p class="result-message">Great job! You stopped the timer after <span id="timeText">0.00</span> seconds!</p>
+            <div id="recordMessage" class="record-message"></div>
+            
+            <div class="records-container">
+                <div class="current-time">
+                    <h3>Current Time</h3>
+                    <div class="time-display">
+                        <span id="currentTimeDisplay">0.00</span>
+                        <span class="time-label">seconds</span>
+                    </div>
+                </div>
+                <div class="best-record">
+                    <h3>Best Record</h3>
+                    <div class="time-display">
+                        <span id="bestRecordDisplay">0.00</span>
+                        <span class="time-label">seconds</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="window.location.href='start.html'" class="game-button">Try Again</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Click Game. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the final time and best record from localStorage
+            const finalTime = parseFloat(localStorage.getItem('finalTime'));
+            const bestRecord = parseFloat(localStorage.getItem('bestRecord'));
+            
+            // Update the time display
+            const timeNumber = document.querySelector('.time-number');
+            const timeText = document.getElementById('timeText');
+            const recordMessage = document.getElementById('recordMessage');
+            const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+            const bestRecordDisplay = document.getElementById('bestRecordDisplay');
+            
+            // Check if this is a new record
+            if (finalTime === bestRecord) {
+                recordMessage.textContent = "🏆 New Best Record! 🏆";
+                recordMessage.style.color = 'var(--accent-color)';
+                recordMessage.style.fontSize = '1.2rem';
+                recordMessage.style.fontWeight = 'bold';
+                recordMessage.style.margin = '1rem 0';
+            }
+            
+            // Animate the number counting up
+            let currentNumber = 0;
+            const targetNumber = finalTime;
+            const duration = 1000; // 1 second
+            const steps = 50;
+            const increment = targetNumber / steps;
+            const stepDuration = duration / steps;
+            
+            const counter = setInterval(() => {
+                currentNumber += increment;
+                if (currentNumber >= targetNumber) {
+                    currentNumber = targetNumber;
+                    clearInterval(counter);
+                }
+                // Format the number to always show 2 decimal places
+                const formattedNumber = currentNumber.toFixed(2);
+                timeNumber.textContent = formattedNumber;
+                timeText.textContent = formattedNumber;
+                currentTimeDisplay.textContent = formattedNumber;
+            }, stepDuration);
+
+            // Display the best record
+            bestRecordDisplay.textContent = bestRecord.toFixed(2);
+        });
+    </script>
+
+    <style>
+        .records-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .current-time, .best-record {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .current-time h3, .best-record h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .time-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            font-family: monospace;
+        }
+
+        .time-label {
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-left: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .records-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</body>
+</html> 
